@@ -19,11 +19,22 @@ export default function Home() {
 
     fetchData();
   }, []);
-  function Delete(id) {
-    fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
-      method: 'DELETE',
-    });
-  }
+  function Delete(post) {
+      fetch(`https://jsonplaceholder.typicode.com/posts/${post.id}`, {
+        method: 'DELETE',
+      })
+      .then(() => {
+        // Filter out the deleted post
+        const updatedPosts = posts.filter(p => p.id !== post.id);
+        
+        // Update state with the new array
+        setPosts(updatedPosts);
+  
+        // Debugging alerts
+      })
+      .catch(err => console.error("Error deleting post:", err));
+    }
+  
   
   return (
     <div className="m-10">
@@ -34,7 +45,7 @@ export default function Home() {
         <div className="m-10" key={post.id}>
           {post.body}
           <div>
-          <button onClick={()=>Delete(post.id)} className="m-3 bg-slate-800 p-1"> Delete</button>
+          <button onClick={()=>Delete(post)} className="m-3 bg-slate-800 p-1"> Delete</button>
           </div>
         </div>: <div></div>
       ))}
