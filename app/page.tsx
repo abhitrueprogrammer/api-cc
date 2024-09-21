@@ -1,12 +1,11 @@
 "use client";
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from "react";
 interface Post {
   id: number;
   body: string;
   title: string; // Add other properties if needed
 }
-
-
 export default function Home() {
   const [posts, setPosts] = useState([]);
 
@@ -19,6 +18,10 @@ export default function Home() {
 
     fetchData();
   }, []);
+  const router = useRouter();
+  const newPost = () =>{
+    router.push('/new')
+  }
   function Delete(post) {
       fetch(`https://jsonplaceholder.typicode.com/posts/${post.id}`, {
         method: 'DELETE',
@@ -34,7 +37,7 @@ export default function Home() {
       })
       .catch(err => console.error("Error deleting post:", err));
     }
-  
+
   
   return (
     <div className="m-10">
@@ -45,11 +48,13 @@ export default function Home() {
         <div className="m-10" key={post.id}>
           {post.body}
           <div>
-          <button onClick={()=>Delete(post)} className="m-3 bg-slate-800 p-1"> Delete</button>
+          <button onClick={() => {Delete(post)}} className="m-3 bg-slate-800 p-1"> Delete</button>
           </div>
         </div>: <div></div>
       ))}
-      <button onClick={() =>console.log("Work pending")} className="md-10 rounded-md  text-black p-5 bg-white border-red-200">Create New Post</button>
+      <button onClick={()=> newPost()} className="md-10 rounded-md  text-black p-5 bg-white border-red-200">Create New Post</button>
+     
     </div>
+    
   );
 }
