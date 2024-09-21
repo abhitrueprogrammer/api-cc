@@ -49,7 +49,7 @@ export default function Home() {
           </div>
         </div>: <div></div>
       ))}
-      <button className="md-10 rounded-md  text-black p-5 bg-white border-red-200">Create New Post</button>
+      <button onClick={() =>console.log("Work pending")} className="md-10 rounded-md  text-black p-5 bg-white border-red-200">Create New Post</button>
     </div>
   );
 }
