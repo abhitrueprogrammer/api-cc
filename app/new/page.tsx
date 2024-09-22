@@ -12,7 +12,7 @@ const FormPage: React.FC = () => {
         setPosts(data);
       };
   
-      fetchData();
+      fetchData();3
     }, []);
 
 
