@@ -1,27 +1,40 @@
+//Use Axios here
 "use client";
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from "react";
-
 interface Post {
   id: number;
   body: string;
   title: string; // Add other properties if needed
 }
+;
+const api = axios.create({
+  // baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  baseURL: "https://jsonplaceholder.typicode.com/",
+})
 export default function Home() {
   const [isLoading, setIsLoading]= useState(false);
   const [posts, setPosts] = useState<Post[]>([]);
-  let BASE_URL = process.env.BASE_URL;
-  console.log(`${BASE_URL}/posts`);
+  
 
   useEffect(() => {
     setIsLoading(true);
     const fetchData = async () => {
-      let res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/posts`);
-      let data = await res.json();
-      setPosts(data);
-      setIsLoading(false);
+      try{
+        setIsLoading(true)
+        const res = await api.get<Post[]>("/posts");
+        setPosts(res.data);
+      }
+      catch(error){
+        throw error;
+      }
+      finally{
+        setIsLoading(false);
+
+      }
     };
-  
+
     fetchData();
   }, []);
 
@@ -29,20 +42,31 @@ export default function Home() {
   const newPost = () =>{
     router.push('/new')
   }
-  function Delete(post: Post) {
-      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/${post.id}`, {
-        method: 'DELETE',
-      })
-      .then(() => {
-        // Filter out the deleted post
-        const updatedPosts = posts.filter((p: Post) => p.id !== post.id);
+  async function Delete(post: Post) {
+      try
+      {
+        await api.delete(`/posts/${post.id}`);
+        const updatedPosts = posts.filter((p) => p.id !== post.id);
+              setPosts(updatedPosts);
+
+      }
+      catch(error)
+      {
+        throw error
+      }
+      // fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/${post.id}`, {
+      //   method: 'DELETE',
+      // })
+      // .then(() => {
+      //   // Filter out the deleted post
+      //   const updatedPosts = posts.filter((p: Post) => p.id !== post.id);
         
-        // Update state with the new array
-        setPosts(updatedPosts);
+      //   // Update state with the new array
+      //   setPosts(updatedPosts);
   
-        // Debugging alerts
-      })
-      .catch(err => console.error("Error deleting post:", err));
+      //   // Debugging alerts
+      // })
+      // .catch(err => console.error("Error deleting post:", err));
     }
 
   if(isLoading)
