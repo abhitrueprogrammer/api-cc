@@ -9,7 +9,7 @@ interface Post {
 }
 export default function Home() {
   const [isLoading, setIsLoading]= useState(false);
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   let BASE_URL = process.env.BASE_URL;
   console.log(`${BASE_URL}/posts`);
 
@@ -29,13 +29,13 @@ export default function Home() {
   const newPost = () =>{
     router.push('/new')
   }
-  function Delete(post) {
-      fetch(`https://jsonplaceholder.typicode.com/posts/${post.id}`, {
+  function Delete(post: Post) {
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/posts/${post.id}`, {
         method: 'DELETE',
       })
       .then(() => {
         // Filter out the deleted post
-        const updatedPosts = posts.filter(p => p.id !== post.id);
+        const updatedPosts = posts.filter((p: Post) => p.id !== post.id);
         
         // Update state with the new array
         setPosts(updatedPosts);
@@ -57,7 +57,7 @@ export default function Home() {
       
       {isLoading? (
              <div className='m-10'>Loading...</div>):<div>      
-             {posts.map((post) => (
+             {posts.map((post: Post) => (
               post.id < 10?
               <div className="m-10" key={post.id}>
                 {post.body}
