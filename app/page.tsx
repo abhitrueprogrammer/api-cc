@@ -47,7 +47,7 @@ export default function Home() {
       {
         await api.delete(`/posts/${post.id}`);
         const updatedPosts = posts.filter((p) => p.id !== post.id);
-              setPosts(updatedPosts);
+        setPosts(updatedPosts);
 
       }
       catch(error)
