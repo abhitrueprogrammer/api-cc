@@ -10,11 +10,13 @@ interface Post {
 export default function Home() {
   const [isLoading, setIsLoading]= useState(false);
   const [posts, setPosts] = useState([]);
-  let BASE_URL = 'https://jsonplaceholder.typicode.com/'
+  let BASE_URL = process.env.BASE_URL;
+  console.log(`${BASE_URL}/posts`);
+
   useEffect(() => {
     setIsLoading(true);
     const fetchData = async () => {
-      let res = await fetch(`${BASE_URL}/posts`);
+      let res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/posts`);
       let data = await res.json();
       setPosts(data);
       setIsLoading(false);
